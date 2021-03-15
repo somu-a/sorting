@@ -90,7 +90,7 @@ def _merged(xs, ys, cmp=cmp_standard):
     result = []
 
     while i < len(xs) and j < len(ys):
-        comp = cmp(xs[i], ys[i])
+        comp = cmp(xs[i], ys[j])
         if comp == -1:
             result.append(xs[i])
             i += 1
@@ -160,25 +160,30 @@ def quick_sorted(xs, cmp=cmp_standard):
     You should return a sorted version of the input list xs.
     You should not modify the input list xs in any way.
     '''
+
+    xs_copy = deepcopy(xs)
     smaller = []
     larger = []
     equal = []
 
-    if len(xs) <= 1:
-        return xs
-    else:
-        pivot = random.choice(xs)
-        for i in xs:
-            if i < pivot:
-                smaller.append(i)
-            elif i > pivot:
-                larger.append(i)
-            elif i == pivot:
-                equal.append(i)
+    if len(xs_copy) <= 1:
+        return xs_copy
+    pivot = random.choice(xs_copy)
+    for i in xs_copy:
+        if i < pivot:
+            smaller.append(i)
+        elif i > pivot:
+            larger.append(i)
+        elif i == pivot:
+            equal.append(i)
+
     smaller_sorted = quick_sorted(smaller, cmp)
     larger_sorted = quick_sorted(larger, cmp)
 
-    return smaller_sorted + equal + larger_sorted
+    if cmp == cmp_standard:
+        return smaller_sorted + equal + larger_sorted
+    elif cmp == cmp_reverse:
+        return larger_sorted + equal + smaller_sorted
 
 
 def quick_sort(xs, cmp=cmp_standard):
